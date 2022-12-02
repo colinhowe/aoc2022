@@ -1,7 +1,8 @@
 import run from "aocrunner";
 
 const parseInput = (rawInput: string) => {
-  return rawInput.split("\n").map(s => s.length ? Number.parseInt(s, 10) : undefined);
+  // Add a terminal value so that we don't have to worry about dealing with the end of the list later
+  return [...rawInput.split("\n").map(s => s.length ? Number.parseInt(s, 10) : undefined), undefined];
 }
 
 const part1 = (rawInput: string) => {
@@ -21,7 +22,18 @@ const part1 = (rawInput: string) => {
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return;
+  const [allSums] = input.reduce(([allElfCalories, sumSoFar], nextInput) => {
+    if (nextInput) {
+      return [allElfCalories, sumSoFar + nextInput];
+    } else {
+      return [[...allElfCalories, sumSoFar], 0];
+    }
+  }, [[] as number[], 0]);
+
+  allSums.sort((a, b) => b - a);
+  console.log(allSums)
+
+  return (allSums[0] + allSums[1] + allSums[2]).toString();
 };
 
 run({
@@ -49,10 +61,23 @@ run({
   },
   part2: {
     tests: [
-      // {
-      //   input: ``,
-      //   expected: "",
-      // },
+      {
+        input: `1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000`,
+        expected: "45000",
+      },
     ],
     solution: part2,
   },
