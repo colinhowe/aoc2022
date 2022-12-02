@@ -8,3 +8,4 @@ node_modules
 .vscode
 .env
 dist
+aoc2022.code-workspace
